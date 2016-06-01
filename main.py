@@ -7,13 +7,16 @@ import tensorflow as tf
 
 
 # params
-epochs = 2
-batch_size = 5
-test_size = 100
-display_step = 5
-test_split = 1000
+epochs = 10
+batch_size = 50
+test_size = 1800
+display_step = 100
+test_split = 19000
 n_classes = 5
 learning_rate = 0.001  # get numbers from paper?
+model_dir = './models/'
+train_progress = './report/train_progress.csv'
+test_progress = './report/test_progress.csv'
 
 # input, label placeholders
 x = tf.placeholder(tf.float32, [batch_size, 45, 45, 3])
@@ -65,9 +68,18 @@ with tf.Session() as sess:
                       ", Minibatch Loss= " + "{:.6f}".format(loss) + \
                       ", Training RMSE= " + "{:.5f}".format(acc)
 
+                with open(train_progress, mode='a') as f:
+                    f.write('{},{},{},{}\n'.format(epoch,
+                                              (step * batch_size),
+                                              acc,
+                                              loss))
+
             step += 1
 
+        print 'Saving checkpoint'
+        saver.save(sess, model_dir, global_step=epoch)
         print 'Epoch {} finished'.format(epoch)
+
         print 'Testing...'
         # test
         test_step = 1
@@ -85,8 +97,7 @@ with tf.Session() as sess:
         test_rmse = test_rmse / test_step
         print 'Average Test RMSE:{}'.format(test_rmse)
 
-        #save
-        # TODO implement saving model
-        # https://www.tensorflow.org/versions/r0.8/how_tos/variables/index.html
+        with open('./report/test_progress.csv', mode='a') as f:
+            f.write('{},{}\n'.format(epoch, test_rmse))
 
         epoch += 1
