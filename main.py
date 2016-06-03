@@ -14,6 +14,7 @@ display_step = 100
 test_split = 19000
 n_classes = 5
 learning_rate = 0.001  # get numbers from paper?
+target_acc = 0.13
 model_dir = './models/'
 train_progress = './report/train_progress.csv'
 test_progress = './report/test_progress.csv'
@@ -47,7 +48,7 @@ with tf.Session() as sess:
 
     # train
     epoch = 1
-    while epoch <= epochs:
+    while True:  # epoch <= epochs:
         print 'Training Epoch {}...'.format(epoch)
         # get data, test_idx = 19000 is ~83% train test split
         dh = DataHelper(batch_size, test_idx=test_split)
@@ -99,5 +100,8 @@ with tf.Session() as sess:
 
         with open('./report/test_progress.csv', mode='a') as f:
             f.write('{},{}\n'.format(epoch, test_rmse))
+
+        if test_rmse < target_acc:
+            break
 
         epoch += 1

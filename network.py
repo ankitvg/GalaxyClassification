@@ -54,7 +54,7 @@ class CandleNet:
             # Output
             # https://www.tensorflow.org/versions/r0.8/api_docs/python/nn.html#tanh
             # Possibly change this to sigmoid?
-            output = fc(fc2, _weights['out'], _biases['out'], tf.tanh)
+            output = fc(fc2, _weights['out'], _biases['out'], tf.sigmoid)
             return output
 
         # Model Helpers --------------------------------------------------------
