@@ -1,6 +1,7 @@
 # Local libararies
 from datahelper import DataHelper
 from network import CandleNet
+from math import sqrt
 
 # Imports
 import tensorflow as tf
@@ -91,12 +92,14 @@ with tf.Session() as sess:
             batch_xs = test_data[start:end]
             batch_ys = test_labels[start:end]
 
-            test_rmse += sess.run(rmse, feed_dict={x: batch_xs, y: batch_ys})
+            _rmse = sess.run(rmse, feed_dict={x: batch_xs, y: batch_ys})
+            _rmse = pow(_rmse, 2) * batch_size
+            test_rmse += _rmse
 
             test_step += 1
 
-        test_rmse = test_rmse / test_step
-        print 'Average Test RMSE:{}'.format(test_rmse)
+        test_rmse = sqrt(test_rmse / float(test_size))
+        print 'Test RMSE:{}'.format(test_rmse)
 
         with open('./report/test_progress.csv', mode='a') as f:
             f.write('{},{}\n'.format(epoch, test_rmse))
