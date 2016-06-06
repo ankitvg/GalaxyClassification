@@ -10,11 +10,12 @@ import tensorflow as tf
 # params
 epochs = 10
 batch_size = 50
-test_size = 1800
+test_size = 3878
 display_step = 100
 test_split = 19000
 n_classes = 5
-learning_rate = 0.001  # get numbers from paper?
+learning_rate = 0.0001  # get numbers from paper?
+momentum = tf.constant(0.9)
 target_acc = 0.13
 model_dir = './models/'
 train_progress = './report/train_progress.csv'
@@ -24,12 +25,15 @@ test_progress = './report/test_progress.csv'
 x = tf.placeholder(tf.float32, [batch_size, 45, 45, 3])
 y = tf.placeholder(tf.float32, [None, n_classes])
 
+tf.set_random_seed(13366)
+
 # create network
 net = CandleNet.get_network(x)
 
 # loss and optimizer
 # Use squared error, becuase our output doesn't reduce to probability dist
 cost = tf.reduce_mean(tf.squared_difference(net, y))
+#cost = tf.squared_difference(net, y)
 # https://www.tensorflow.org/versions/r0.8/api_docs/python/train.html#AdamOptimizer
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
@@ -72,9 +76,9 @@ with tf.Session() as sess:
 
                 with open(train_progress, mode='a') as f:
                     f.write('{},{},{},{}\n'.format(epoch,
-                                              (step * batch_size),
-                                              acc,
-                                              loss))
+                                                   (step * batch_size),
+                                                   acc,
+                                                   loss))
 
             step += 1
 
