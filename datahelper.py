@@ -22,7 +22,7 @@ class DataHelper:
         if end_idx > self.test_idx:
             end_idx = self.test_idx
 
-        data = self._get_image_data(self.train_imgs[self.current_idx:end_idx])
+        data = self._get_image_data(self.train_imgs[self.current_idx:end_idx], augment=False)
         labels = self.train_lbls[self.current_idx:end_idx]
 
         self.current_idx += self.batch_size
