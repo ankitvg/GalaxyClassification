@@ -1,5 +1,4 @@
 /readme~
-*.meta
 /checkpoint
 /-33
 /-34
@@ -11,4 +10,10 @@
 /-101
 /-102
 /-103
-/-104
+/-1.meta
+/-100.meta
+/-101.meta
+/-102.meta
+/-103.meta
+/checkpoint~
+*.gitignore~
